@@ -14,13 +14,13 @@ static int row;
 static void SetSDLIcon(SDL_Window* window)
 {
 	// this will "paste" the struct my_icon into this function
-#include "bd_icon.c"
+#include "tetris_icon.c"
 
 	// these masks are needed to tell SDL_CreateRGBSurface(From)
 	// to assume the data it gets is byte-wise RGB(A) data
 	Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	int shift = (bd_icon.bytes_per_pixel == 3) ? 8 : 0;
+	int shift = (tetris_icon.bytes_per_pixel == 3) ? 8 : 0;
 	rmask = 0xff000000 >> shift;
 	gmask = 0x00ff0000 >> shift;
 	bmask = 0x0000ff00 >> shift;
@@ -29,11 +29,11 @@ static void SetSDLIcon(SDL_Window* window)
 	rmask = 0x000000ff;
 	gmask = 0x0000ff00;
 	bmask = 0x00ff0000;
-	amask = (bd_icon.bytes_per_pixel == 3) ? 0 : 0xff000000;
+	amask = (tetris_icon.bytes_per_pixel == 3) ? 0 : 0xff000000;
 #endif
 
-	SDL_Surface* icon = SDL_CreateRGBSurfaceFrom((void*)bd_icon.pixel_data, bd_icon.width,
-			bd_icon.height, bd_icon.bytes_per_pixel*8, bd_icon.bytes_per_pixel*bd_icon.width,
+	SDL_Surface* icon = SDL_CreateRGBSurfaceFrom((void*)tetris_icon.pixel_data, tetris_icon.width,
+			tetris_icon.height, tetris_icon.bytes_per_pixel*8, tetris_icon.bytes_per_pixel*tetris_icon.width,
 			rmask, gmask, bmask, amask);
 	SDL_SetWindowIcon(window, icon);
 
