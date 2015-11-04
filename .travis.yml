@@ -1,0 +1,15 @@
+language: c
+script: make tetris_win.zip
+before_install:
+- sudo apt-get update -qq
+- sudo apt-get install -y libsdl1.2-dev binutils-mingw-w64-i686 gcc-mingw-w64-i686 icoutils
+sudo: true
+deploy:
+  provider: releases
+  api_key:
+    secure: P9M7F2BOru6OSCWnIgd9QKDV4hqB7vVBnVYljPovgAeSQhFhjr4Mo7IuW1Mk7Gu1WVdPoOo/jJN0cbMtyCsDN2w0KAS/lJ1oKD4yO3qg9b1bkQfVWJdSidQ//vcgLgXbGTRJruWYEruNON26I2sd/YWYtjFAemNkoU4Vy2QmN5nk5JOhRVCkoEjkzzjf0OePzATwSj+7I9+hp5vJQGRuj2X/Ro7PQAMbhBoC6auEAeJVTvfmhb+yNkt1ORdJ4HbwC723rHaupldLzTVN4GnGpmkJEQyrEPevBqgXlCdF2Q0d4RnokLC4cZmb8nEwiUb0WQAylvMrOvlcE02+Qls5Ylm8Wxn4656oK03++bkdGBM5gXIps6T/36F1tYAEYG5zNd7CYm/szyNo4JDe2le/pN4ZA7kRvx3knU7BgsrYaCMZUwqyyhSIPJsyWBaoZFKd4rOj9L4d9dSXBLlkAcc0WbzSpWKorRrUiAXrPSiZxCqE62mAeLIMqB5yd66vFfVRIyiun0CBoM2sHWBS7mvARq3FY3F10v/OGqOXYLbjKd/yUJIJzmAG40qfKoAWJjcsYgZIVB6JZBPXaWzR4WshpWaFHYfGZHW9JuUmaqE/cRuakF8xcJ8puKSizrTY7m+ZGEbyGaYQObclMc3GHEZcdIMWSj3TNAlXApzwEK6L6Ws=
+  file: tetris_win.zip
+  on:
+    tags: true
+    repo: sebseb7/sdl_tetris
+    all_branches: true
