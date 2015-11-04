@@ -3,30 +3,31 @@
 #include <stdlib.h>
 
 
-#include "bd_game.h"
+#include "tetris.h"
 #include "sdl_util.h"
 
 int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unused__))) 
 {
 	srand(time(NULL));
+	
 
 	int zoom = 25;
 
-	unsigned int* pixelbuffer = sdl_init(CAVE_WIDTH*zoom, (INFO_HEIGHT+CAVE_HEIGHT)*zoom,"Boudlerdash",60);
+	unsigned int* pixelbuffer = sdl_init(36*zoom, 27*zoom,"Tetris",60);
 
-	struct bd_game_struct_t* bd_game = bd_game_initialize(0,0);
+	tetris_load();
 
 	int limiter=0;
 
 	while(sdl_handle_events(pixelbuffer)) //limits loop to 60fps
 	{
-		while(sdl_limit_fps(&limiter,8))
+		while(sdl_limit_fps(&limiter,30))
 		{
-			bd_game_process(&bd_game,getkey);
+			tetris_update(getkey);
 			release_upped_keys();
 		}
 
-		bd_game_render(bd_game,pixelbuffer,zoom);
+		tetris_render(pixelbuffer,zoom);
 
 	}
 	sdl_deinit();

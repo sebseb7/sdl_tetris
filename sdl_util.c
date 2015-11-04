@@ -232,10 +232,10 @@ int sdl_limit_fps(int* limiter,int fps)
 
 	int current_tick = SDL_GetTicks();
 
-	if( (current_tick - *limiter) > 125)
+	if( (current_tick - *limiter) > (1000/fps))
 	{
 		current_tick = SDL_GetTicks();
-		*limiter+=125;
+		*limiter+=(1000/fps);
 		return 1;	
 	}
 	return 0;
