@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 
-#define PLAYERS 3
 #include "tetris.h"
 static Grid grids[PLAYERS];
 

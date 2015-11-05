@@ -1,6 +1,8 @@
 #ifndef TETRIS_H_
 #define TETRIS_H_
 
+#define PLAYERS 3
+
 enum {
 	GRID_WIDTH = 10,
 	GRID_HEIGHT = 20,

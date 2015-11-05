@@ -445,12 +445,12 @@ static void pixel2(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
 				
 	unsigned int col = (r[color]<<16)+(g[color]<<8)+b[color];
 
-				if(pixelbuffer[((y*(zoom/2))*36*zoom)+x*(zoom/2)] != col)
+				if(pixelbuffer[((y*(zoom/2))*PLAYERS*12*zoom)+x*(zoom/2)] != col)
 					for(int a = 0; a < (zoom/2)-1;a++)
 					{
 						for(int b = 0;b < (zoom/2)-1;b++)
 						{
-							pixelbuffer[((y*(zoom/2)+a)*36*zoom)+x*(zoom/2)+b] = col;
+							pixelbuffer[((y*(zoom/2)+a)*PLAYERS*12*zoom)+x*(zoom/2)+b] = col;
 						}
 					}
 
@@ -473,12 +473,12 @@ static void pixel(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
 				
 	unsigned int col = (r[color]<<16)+(g[color]<<8)+b[color];
 
-				if(pixelbuffer[((y*zoom)*36*zoom)+x*zoom] != col)
+				if(pixelbuffer[((y*zoom)*PLAYERS*12*zoom)+x*zoom] != col)
 					for(int a = 0; a < zoom-1;a++)
 					{
 						for(int b = 0;b < zoom-1;b++)
 						{
-							pixelbuffer[((y*zoom+a)*36*zoom)+x*zoom+b] = col;
+							pixelbuffer[((y*zoom+a)*PLAYERS*12*zoom)+x*zoom+b] = col;
 						}
 					}
 
