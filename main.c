@@ -3,19 +3,23 @@
 #include <stdlib.h>
 
 
+#define PLAYERS 3
 #include "tetris.h"
+static Grid grids[PLAYERS];
+
 #include "sdl_util.h"
+
 
 int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unused__))) 
 {
 	srand(time(NULL));
 	
 
-	int zoom = 24;
+	int zoom = 18;
 
-	unsigned int* pixelbuffer = sdl_init(36*zoom, 27*zoom,"Tetris",60);
+	unsigned int* pixelbuffer = sdl_init(PLAYERS*12*zoom, 27*zoom,"Tetris",60);
 
-	tetris_load();
+	for(int i = 0; i < PLAYERS; i++) init_grid(&grids[i], i);
 
 	int limiter=0;
 
@@ -23,11 +27,15 @@ int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unu
 	{
 		while(sdl_limit_fps(&limiter,30))
 		{
-			tetris_update(getkey);
+			for(int i = 0; i < PLAYERS; i++) {
+				update_grid(&grids[i],getkey);
+			}
 			release_upped_keys();
 		}
 
-		tetris_render(pixelbuffer,zoom);
+		for(int i = 0; i < PLAYERS; i++) {
+			draw_grid(&grids[i],i,pixelbuffer,zoom);
+		}
 
 	}
 	sdl_deinit();

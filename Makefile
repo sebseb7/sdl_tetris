@@ -18,11 +18,11 @@ clean:
 	rm -f Tetris.app/Contents/Resources/iconfile.icns
 	rm -f tetrisrc.o
 
-tetris: main.c sdl_util.c sdl_util.h grid.c grid.h tetris.h tetris.c Makefile 
-	@$(COMPILER) $(FLAGS) main.c grid.c tetris.c sdl_util.c $(LDFLAGS) -o tetris 
+tetris: main.c sdl_util.c sdl_util.h tetris.h tetris.c Makefile 
+	@$(COMPILER) $(FLAGS) main.c tetris.c sdl_util.c $(LDFLAGS) -o tetris 
 
-Tetris.app/Contents/MacOS/tetris_osx: main.c sdl_util.c sdl_util.h grid.c grid.h tetris.h tetris.c Makefile 
-	$(COMPILER) $(FLAGS) main.c grid.c tetris.c sdl_util.c $(LDFLAGS) -o tetris_osx
+Tetris.app/Contents/MacOS/tetris_osx: main.c sdl_util.c sdl_util.h tetris.h tetris.c Makefile 
+	$(COMPILER) $(FLAGS) main.c tetris.c sdl_util.c $(LDFLAGS) -o tetris_osx
 	@install_name_tool -change /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib @executable_path/../Frameworks/SDL2.framework/libSDL2-2.0.0.dylib tetris_osx
 	@makeicns -32 tetris_36x36x4.png -out Tetris.app/Contents/Resources/iconfile.icns 
 	@mv tetris_osx Tetris.app/Contents/MacOS
@@ -32,10 +32,10 @@ Tetris.app/Contents/MacOS/tetris_osx: main.c sdl_util.c sdl_util.h grid.c grid.h
 tetris.ico: tetris_36x36x4.png Makefile
 	icotool -c -o tetris.ico tetris_36x36x4.png
 
-tetris.exe: tetris_36x36x4.png tetris.ico main.c sdl_util.c sdl_util.h grid.c grid.h tetris.h tetris.c Makefile SDL2-2.0.4
+tetris.exe: tetris_36x36x4.png tetris.ico main.c sdl_util.c sdl_util.h tetris.h tetris.c Makefile SDL2-2.0.4
 	echo "0 ICON tetris.ico" > tetris.rc
 	i686-w64-mingw32-windres tetris.rc tetrisrc.o
-	i686-w64-mingw32-gcc -static -std=gnu99 -ISDL2-2.0.4/i686-w64-mingw32/include/SDL2 -D_GNU_SOURCE=1 -Dmain=SDL_main -LSDL2-2.0.4/i686-w64-mingw32/lib  main.c grid.c tetris.c sdl_util.c -lmingw32 -lSDL2main -lSDL2 -mwindows -Wl,--no-undefined -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -static-libgcc  tetrisrc.o -o tetris.exe
+	i686-w64-mingw32-gcc -static -std=gnu99 -ISDL2-2.0.4/i686-w64-mingw32/include/SDL2 -D_GNU_SOURCE=1 -Dmain=SDL_main -LSDL2-2.0.4/i686-w64-mingw32/lib  main.c tetris.c sdl_util.c -lmingw32 -lSDL2main -lSDL2 -mwindows -Wl,--no-undefined -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -static-libgcc  tetrisrc.o -o tetris.exe
 
 tetris_win.zip: tetris.exe
 	zip -j tetris_win.zip tetris.exe 
