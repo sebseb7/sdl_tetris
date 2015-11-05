@@ -26,7 +26,7 @@ tetris_osx: main.c sdl_util.c sdl_util.h grid.c grid.h tetris.h tetris.c Makefil
 	@install_name_tool -change /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib @executable_path/../Frameworks/SDL2.framework/libSDL2-2.0.0.dylib tetris_osx
 	@makeicns -32 tetris_36x36x4.png -out Tetris.app/Contents/Resources/iconfile.icns 
 	@mv tetris_osx Tetris.app/Contents/MacOS
-	cp -f /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib Tetris.app/Contents/Frameworks/SDL2.framework/libSDL2-2.0.0.dylib
+	cp -f /usr/local/lib/libSDL2-2.0.0.dylib Tetris.app/Contents/Frameworks/SDL2.framework/libSDL2-2.0.0.dylib
 	@touch Tetris.app
 	@zip -r tetris_osx.zip Tetris.app 
 
