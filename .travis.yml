@@ -16,6 +16,7 @@ deploy:
     api_key:
       secure: RG3CrPja88n77OrugPC56it5IyFU3KliaAU3uw6XwViUgUG7Hx0RpdIMTbFP0ymn+4H+v+m0CQeo/UslI4jg8fuidLHI8KsdbL1cJgofEjchlHPNO4lyJV+C0C3TWxlBBoF1ktqmkPihfOHYcEvQURSMWNnJZ0jOCbKYjv2O/gRqUu9e4TN3CaBEowf7yHdqcMpBmWSj9GAfd33LWErrflswo3yxz06oo7cnRqi5q0+NryrK3LmKDDM4l9JYPM4kKYg6DcyhPBdCjnGAmyyIeSQ4o1B0tfu4z9Bq7d3PIrR0mfDLxooGhkJ0Y6EOccfYktQDLdQbntg3ZzH2urvx+zalxMO6/ILIgOg0nCtJG6Pag+hmXwnWjw17IoAY1pIlYR2UrZvZ3uZkbNXSUCTKqGhh6rdSCHQPZhTL5v9Pcnr7pD1olWLhmvuL6KwVjaFp7wswGqpBTEm7OSomQE+nzt9dqvMWmuHvn1MJIt2tZ9z9m/7NovqFHr1wWDvvioH94sGTGlsj4Lg7FuIqpw4U9NEHh2uAj35wovbl2IDn7jKDO6zGzcOTmCetcRIxsynyabbg7TsQIfDAQzDWoWP7FFuVLQW5dHLSaZfWdCtg2DQMWaPs8lDu8eGMxlbvr93DpX/OvOAoGlP6vnWUpHWDCqSm0JjT/LB9WrQdZQrQZVs=
     file: tetris_win.zip
+    skip_cleanup: true
     on:
       tags: true
       repo: sebseb7/sdl_tetris
@@ -25,6 +26,7 @@ deploy:
     api_key:
       secure: RG3CrPja88n77OrugPC56it5IyFU3KliaAU3uw6XwViUgUG7Hx0RpdIMTbFP0ymn+4H+v+m0CQeo/UslI4jg8fuidLHI8KsdbL1cJgofEjchlHPNO4lyJV+C0C3TWxlBBoF1ktqmkPihfOHYcEvQURSMWNnJZ0jOCbKYjv2O/gRqUu9e4TN3CaBEowf7yHdqcMpBmWSj9GAfd33LWErrflswo3yxz06oo7cnRqi5q0+NryrK3LmKDDM4l9JYPM4kKYg6DcyhPBdCjnGAmyyIeSQ4o1B0tfu4z9Bq7d3PIrR0mfDLxooGhkJ0Y6EOccfYktQDLdQbntg3ZzH2urvx+zalxMO6/ILIgOg0nCtJG6Pag+hmXwnWjw17IoAY1pIlYR2UrZvZ3uZkbNXSUCTKqGhh6rdSCHQPZhTL5v9Pcnr7pD1olWLhmvuL6KwVjaFp7wswGqpBTEm7OSomQE+nzt9dqvMWmuHvn1MJIt2tZ9z9m/7NovqFHr1wWDvvioH94sGTGlsj4Lg7FuIqpw4U9NEHh2uAj35wovbl2IDn7jKDO6zGzcOTmCetcRIxsynyabbg7TsQIfDAQzDWoWP7FFuVLQW5dHLSaZfWdCtg2DQMWaPs8lDu8eGMxlbvr93DpX/OvOAoGlP6vnWUpHWDCqSm0JjT/LB9WrQdZQrQZVs=
     file: tetris_osx.zip
+    skip_cleanup: true
     on:
       tags: true
       repo: sebseb7/sdl_tetris
