@@ -3,11 +3,11 @@ os:
 - osx
 language: c
 script: 
-- if [[ "$os" == "linux" ]]; then make tetris_win.zip; fi
-- if [[ "$os" == "osx" ]];   then make bd_osx; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make tetris_win.zip; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then make bd_osx; fi
 before_install:
-- if [[ "$os" == "linux" ]]; then sudo apt-get update -qq ;fi
-- if [[ "$os" == "linux" ]]; then sudo apt-get install -y libsdl1.2-dev binutils-mingw-w64-i686 gcc-mingw-w64-i686 icoutils; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq ;fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libsdl1.2-dev binutils-mingw-w64-i686 gcc-mingw-w64-i686 icoutils; fi
 sudo: true
 deploy:
   provider: releases
@@ -18,4 +18,5 @@ deploy:
     tags: true
     repo: sebseb7/sdl_tetris
     all_branches: true
+    condition: "$TRAVIS_OS_NAME == linux"
 
