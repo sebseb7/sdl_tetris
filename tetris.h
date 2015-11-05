@@ -9,7 +9,6 @@ enum {
 };
 
 enum {
-	STATE_FREE,
 	STATE_NORMAL,
 	STATE_WAIT,
 	STATE_CLEARLINES,

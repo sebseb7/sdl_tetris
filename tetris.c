@@ -56,16 +56,16 @@ static int grid_collision(Grid* grid, int top_also) {
 			if(STONES[grid->stone][x * 4 + y] & grid->rot) {
 				if(top_also) {
 					if(	x + grid->x < 0 || x + grid->x >= GRID_WIDTH ||
-						y + grid->y < 0 || y + grid->y >= GRID_HEIGHT ||
-						grid->matrix[y + grid->y][x + grid->x]) {
+							y + grid->y < 0 || y + grid->y >= GRID_HEIGHT ||
+							grid->matrix[y + grid->y][x + grid->x]) {
 						return 1;
 					}
 				}
 				else {
 					if(	x + grid->x < 0 || x + grid->x >= GRID_WIDTH ||
-						y + grid->y >= GRID_HEIGHT || (
-						y + grid->y >= 0 &&
-						grid->matrix[y + grid->y][x + grid->x])) {
+							y + grid->y >= GRID_HEIGHT || (
+								y + grid->y >= 0 &&
+								grid->matrix[y + grid->y][x + grid->x])) {
 						return 1;
 					}
 				}
@@ -81,7 +81,7 @@ static void stone_to_grid(Grid* grid, char color) {
 	for(y = 0; y < 4; y++) {
 		for(x = 0; x < 4; x++) {
 			if(STONES[grid->stone][x * 4 + y] & grid->rot &&
-				y + grid->y >= 0) {
+					y + grid->y >= 0) {
 				grid->matrix[y + grid->y][x + grid->x] = color;
 			}
 		}
@@ -279,51 +279,51 @@ static void update_grid_clearlines(Grid* grid) {
 	// animations
 	switch(grid->animation) {
 
-	case ANIMATION_BLINK:
-		i = (grid->state_delay & 2) ? COLOR_WHITE : COLOR_BLACK;
-		for(y = 0; y < GRID_HEIGHT; y++) {
-			if(!grid->highlight[y]) continue;
-			for(x = 0; x < GRID_WIDTH; x++) grid->matrix[y][x] = i;
-		}
-		break;
-
-	case ANIMATION_SHIFT:
-		if(grid->state_delay & 1) {
+		case ANIMATION_BLINK:
+			i = (grid->state_delay & 2) ? COLOR_WHITE : COLOR_BLACK;
 			for(y = 0; y < GRID_HEIGHT; y++) {
 				if(!grid->highlight[y]) continue;
-				if(y & 1) {
-					for(x = 1; x < GRID_WIDTH; x++)
-						grid->matrix[y][x - 1] = grid->matrix[y][x];
-					grid->matrix[y][GRID_WIDTH - 1] = 0;
-				}
-				else {
-					for(x = GRID_WIDTH - 1; x > 0; x--)
-						grid->matrix[y][x] = grid->matrix[y][x - 1];
-					grid->matrix[y][0] = 0;
-				}
+				for(x = 0; x < GRID_WIDTH; x++) grid->matrix[y][x] = i;
 			}
-		}
-		break;
+			break;
 
-	case ANIMATION_VANISH:
-		if(grid->state_delay & 1) {
-			for(y = 0; y < GRID_HEIGHT; y++) {
-				if(!grid->highlight[y]) continue;
-
-				x = rand() % GRID_WIDTH;
-				for(i = 0; i < GRID_WIDTH; i++) {
-					if(grid->matrix[y][x]) {
-						grid->matrix[y][x] = 0;
-						break;
+		case ANIMATION_SHIFT:
+			if(grid->state_delay & 1) {
+				for(y = 0; y < GRID_HEIGHT; y++) {
+					if(!grid->highlight[y]) continue;
+					if(y & 1) {
+						for(x = 1; x < GRID_WIDTH; x++)
+							grid->matrix[y][x - 1] = grid->matrix[y][x];
+						grid->matrix[y][GRID_WIDTH - 1] = 0;
 					}
-					if(++x == GRID_WIDTH) x = 0;
+					else {
+						for(x = GRID_WIDTH - 1; x > 0; x--)
+							grid->matrix[y][x] = grid->matrix[y][x - 1];
+						grid->matrix[y][0] = 0;
+					}
 				}
-
 			}
-		}
-		break;
+			break;
 
-	default: break;
+		case ANIMATION_VANISH:
+			if(grid->state_delay & 1) {
+				for(y = 0; y < GRID_HEIGHT; y++) {
+					if(!grid->highlight[y]) continue;
+
+					x = rand() % GRID_WIDTH;
+					for(i = 0; i < GRID_WIDTH; i++) {
+						if(grid->matrix[y][x]) {
+							grid->matrix[y][x] = 0;
+							break;
+						}
+						if(++x == GRID_WIDTH) x = 0;
+					}
+
+				}
+			}
+			break;
+
+		default: break;
 	}
 
 	// erase lines
@@ -345,7 +345,7 @@ static void update_grid_clearlines(Grid* grid) {
 			for(i = y; i > 0; i--)
 				for(x = 0; x < GRID_WIDTH; x++)
 					grid->matrix[i][x] = grid->matrix[i - 1][x];
-			
+
 			for(x = 0; x < GRID_WIDTH; x++) grid->matrix[0][x] = 0;
 		}
 		grid->state = STATE_NORMAL;
@@ -360,9 +360,10 @@ static void update_grid_wait(Grid* grid) {
 	if(++grid->state_delay > 15) grid->state = STATE_NORMAL;
 }
 
-static void update_grid_free(Grid* grid) {
-	++grid->state_delay;
+static void gameover_callback(int nr,int lines)
+{
 }
+
 
 static void update_grid_gameover(Grid* grid) {
 	int x, y, i;
@@ -375,61 +376,46 @@ static void update_grid_gameover(Grid* grid) {
 	}
 
 	if(++grid->state_delay > 25) {
-		//player_gameover(grid->nr,grid->lines);
+		gameover_callback(grid->nr,grid->lines);
 		init_grid(grid, grid->nr);
 	}
 }
 
 
-void suspend_grid(Grid* grid) {
-	grid->state = STATE_FREE;
-}
 void init_grid(Grid* grid, int nr) {
 	grid->nr = nr;
 	grid->ticks_per_drop = 20;
 	grid->level_progress = 0;
 	grid->lines = 0;
 	grid->animation = 0;
-//	grid->state = STATE_FREE;
 	grid->state = STATE_NORMAL;
 	memset(grid->matrix, 0, sizeof(grid->matrix));
 	memset(grid->highlight, 0, sizeof(grid->highlight));
 	grid->stone_count = -1;
 	new_stone(grid);
 	new_stone(grid);
-	int x, y;
-	for(x = 0; x < 12; x++) {
-		for(y = 0; y < 32; y++) {
-//			pixel(grid->nr * 12 + x, y, 0);
-//			set_frame_buffer(grid->nr * 12 + x, y, 0);
-		}
-	}
 }
 
 
 void update_grid(Grid* grid,int getkey(int)) {
 	switch(grid->state) {
-	case STATE_FREE:
-		update_grid_free(grid);
-		break;
+		case STATE_NORMAL:
+			update_grid_normal(grid,getkey);
+			break;
 
-	case STATE_NORMAL:
-		update_grid_normal(grid,getkey);
-		break;
+		case STATE_WAIT:
+			update_grid_wait(grid);
+			break;
 
-	case STATE_WAIT:
-		update_grid_wait(grid);
-		break;
+		case STATE_CLEARLINES:
+			update_grid_clearlines(grid);
+			break;
 
-	case STATE_CLEARLINES:
-		update_grid_clearlines(grid);
-		break;
+		case STATE_GAMEOVER:
+			update_grid_gameover(grid);
+			break;
 
-	case STATE_GAMEOVER:
-		update_grid_gameover(grid);
-		break;
-
-	default: break;
+		default: break;
 
 	}
 }
@@ -440,27 +426,20 @@ static void pixel2(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
 	uint8_t r[] = {30,100,255,0   ,255,255,255,  0,127,0  ,127,127,0  ,255,255,255};
 	uint8_t g[] = {30,100 ,0  ,255,255,0  ,0  ,255,127,127,255,0  ,127,0  ,127,0  };
 	uint8_t b[] = {30,0   ,0  ,0  ,0  ,255,255,255,255,255,127,255,127,127,0  ,255};
-				
-			
-				
+
+
+
 	unsigned int col = (r[color]<<16)+(g[color]<<8)+b[color];
 
-				if(pixelbuffer[((y*(zoom/2))*PLAYERS*12*zoom)+x*(zoom/2)] != col)
-					for(int a = 0; a < (zoom/2)-1;a++)
-					{
-						for(int b = 0;b < (zoom/2)-1;b++)
-						{
-							pixelbuffer[((y*(zoom/2)+a)*PLAYERS*12*zoom)+x*(zoom/2)+b] = col;
-						}
-					}
+	if(pixelbuffer[((y*(zoom/2))*PLAYERS*12*zoom)+x*(zoom/2)] != col)
+		for(int a = 0; a < (zoom/2)-1;a++)
+		{
+			for(int b = 0;b < (zoom/2)-1;b++)
+			{
+				pixelbuffer[((y*(zoom/2)+a)*PLAYERS*12*zoom)+x*(zoom/2)+b] = col;
+			}
+		}
 
-//	x+=3;
-//	y+=3;
-
-//	setLedXY(x*3,y*3,r[color],g[color],b[color]);
-//	setLedXY(x*3+1,y*3+1,r[color],g[color],b[color]);
-//	setLedXY(x*3,y*3+1,r[color],g[color],b[color]);
-//	setLedXY(x*3+1,y*3,r[color],g[color],b[color]);
 
 }
 static void pixel(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
@@ -468,27 +447,20 @@ static void pixel(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
 	uint8_t r[] = {30,100,255,0   ,255,255,255,  0,127,0  ,127,127,0  ,255,255,255};
 	uint8_t g[] = {30,100 ,0  ,255,255,0  ,0  ,255,127,127,255,0  ,127,0  ,127,0  };
 	uint8_t b[] = {30,0   ,0  ,0  ,0  ,255,255,255,255,255,127,255,127,127,0  ,255};
-				
-				
-				
+
+
+
 	unsigned int col = (r[color]<<16)+(g[color]<<8)+b[color];
 
-				if(pixelbuffer[((y*zoom)*PLAYERS*12*zoom)+x*zoom] != col)
-					for(int a = 0; a < zoom-1;a++)
-					{
-						for(int b = 0;b < zoom-1;b++)
-						{
-							pixelbuffer[((y*zoom+a)*PLAYERS*12*zoom)+x*zoom+b] = col;
-						}
-					}
+	if(pixelbuffer[((y*zoom)*PLAYERS*12*zoom)+x*zoom] != col)
+		for(int a = 0; a < zoom-1;a++)
+		{
+			for(int b = 0;b < zoom-1;b++)
+			{
+				pixelbuffer[((y*zoom+a)*PLAYERS*12*zoom)+x*zoom+b] = col;
+			}
+		}
 
-//	x+=3;
-//	y+=3;
-
-//	setLedXY(x*3,y*3,r[color],g[color],b[color]);
-//	setLedXY(x*3+1,y*3+1,r[color],g[color],b[color]);
-//	setLedXY(x*3,y*3+1,r[color],g[color],b[color]);
-//	setLedXY(x*3+1,y*3,r[color],g[color],b[color]);
 
 }
 
@@ -550,7 +522,7 @@ static void render_num(int number,int x,int y,int length,int pad, int color,unsi
 		render_digit_5x3(x, y, pad, color,pixelbuffer,zoom);
 		x+=4;
 	}
-	
+
 	render_digits_5x3(x, y, (char*)s, color,pixelbuffer,zoom);
 
 }
@@ -561,51 +533,33 @@ static void render_num(int number,int x,int y,int length,int pad, int color,unsi
 void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom) {
 	int x, y;
 
-	switch(grid->state) {
-	case STATE_FREE:
 
-		// TODO: nice scroll text
-
-		break;
-
-	case STATE_NORMAL:
-	case STATE_WAIT:
-	case STATE_CLEARLINES:
-	case STATE_GAMEOVER:
-
-		// preview
-		for(y = 0; y < 4; y++) {
-			for(x = 0; x < 4; x++) {
-				int color = COLOR_BLACK;
-				if(STONES[grid->next_stone][x * 4 + y] & grid->next_rot) {
-					color = grid->next_stone + 1;
-				}
-//				set_frame_buffer(grid->nr * 12 + x + 7, y + 6, PALETTE[color]);
-				pixel(grid->nr * 12 + x + 7, y + 1, PALETTE[color],pixelbuffer,zoom);
+	// preview
+	for(y = 0; y < 4; y++) {
+		for(x = 0; x < 4; x++) {
+			int color = COLOR_BLACK;
+			if(STONES[grid->next_stone][x * 4 + y] & grid->next_rot) {
+				color = grid->next_stone + 1;
 			}
+			pixel2(grid->nr * 12 * 2 + x + 18, y + 6, PALETTE[color],pixelbuffer,zoom);
 		}
-		// matrix
-		for(y = 0; y < GRID_HEIGHT; y++) {
-			for(x = 0; x < GRID_WIDTH; x++) {
-				int color = grid->matrix[y][x];
-				if(	grid->state == STATE_NORMAL &&
+	}
+	// matrix
+	for(y = 0; y < GRID_HEIGHT; y++) {
+		for(x = 0; x < GRID_WIDTH; x++) {
+			int color = grid->matrix[y][x];
+			if(	grid->state == STATE_NORMAL &&
 					x >= grid->x && x < grid->x + 4 &&
 					y >= grid->y && y < grid->y + 4 &&
 					STONES[grid->stone][(x - grid->x) * 4 + y - grid->y] & grid->rot) {
-					color = grid->stone + 1;
-				}
-//				set_frame_buffer(grid->nr * 12 + 1 + x, y + 11, PALETTE[color]);
-				pixel(grid->nr * 12 + 1 + x, y + 6, PALETTE[color],pixelbuffer,zoom);
+				color = grid->stone + 1;
 			}
+			pixel(grid->nr * 12 + 1 + x, y + 6, PALETTE[color],pixelbuffer,zoom);
 		}
-		// score
-		render_num(grid->lines, grid->nr * 12 * 2 + 2, 5, 3, 0, 8,pixelbuffer,zoom);
-
-		break;
-
-	default: break;
-
 	}
+	// score
+	render_num(grid->lines, grid->nr * 12 * 2 + 2, 5, 3, 0, 8,pixelbuffer,zoom);
+
 
 
 }

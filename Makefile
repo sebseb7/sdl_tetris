@@ -13,7 +13,6 @@ clean:
 	rm -f tetris_win.zip
 	rm -f tetris.rc
 	rm -f tetris.ico
-	rm -rf Tetris.app/Contents/Frameworks/SDL2.framework
 	rm -f Tetris.app/Contents/MacOS/tetris_osx
 	rm -f Tetris.app/Contents/Resources/iconfile.icns
 	rm -f tetrisrc.o
