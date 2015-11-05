@@ -22,12 +22,13 @@ tetris: main.c sdl_util.c sdl_util.h grid.c grid.h tetris.h tetris.c Makefile
 	@$(COMPILER) $(FLAGS) main.c grid.c tetris.c sdl_util.c $(LDFLAGS) -o tetris 
 
 tetris_osx: main.c sdl_util.c sdl_util.h grid.c grid.h tetris.h tetris.c Makefile 
-	@$(COMPILER) -framework SDL2 -I/Library/Frameworks/SDL2.framework/Headers --std=gnu99 main.c grid.c tetris.c sdl_util.c -o tetris_osx 
-	@install_name_tool -change @rpath/SDL2.framework/Versions/A/SDL2 @executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2 tetris_osx
+	$(COMPILER) $(FLAGS) main.c grid.c tetris.c sdl_util.c $(LDFLAGS) -o tetris_osx
+	@install_name_tool -change /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib @executable_path/../Frameworks/SDL2.framework/libSDL2-2.0.0.dylib tetris_osx
 	@makeicns -32 tetris_36x36x4.png -out Tetris.app/Contents/Resources/iconfile.icns 
 	@mv tetris_osx Tetris.app/Contents/MacOS
-	@tar -C /Library/Frameworks -c SDL2.framework | tar -C Tetris.app/Contents/Frameworks -x
+	cp -f /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib Tetris.app/Contents/Frameworks/SDL2.framework/libSDL2-2.0.0.dylib
 	@touch Tetris.app
+	@zip -r tetris_osx.zip Tetris.app 
 
 tetris.ico: tetris_36x36x4.png Makefile
 	icotool -c -o tetris.ico tetris_36x36x4.png
@@ -48,4 +49,7 @@ SDL2-2.0.4:
 
 
 .PHONY : clean all
+
+
+#@$(COMPILER) -framework SDL2 -I/Library/Frameworks/SDL2.framework/Headers --std=gnu99 main.c grid.c tetris.c sdl_util.c -o tetris_osx 
 
