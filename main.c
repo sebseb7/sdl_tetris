@@ -11,7 +11,7 @@ int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unu
 	srand(time(NULL));
 	
 
-	int zoom = 25;
+	int zoom = 24;
 
 	unsigned int* pixelbuffer = sdl_init(36*zoom, 27*zoom,"Tetris",60);
 

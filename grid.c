@@ -599,7 +599,7 @@ void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom) {
 			}
 		}
 		// score
-		render_num(grid->lines, grid->nr * 25 + 2, 5, 3, 0, 8,pixelbuffer,zoom);
+		render_num(grid->lines, grid->nr * 12 * 2 + 2, 5, 3, 0, 8,pixelbuffer,zoom);
 
 		break;
 
