@@ -360,8 +360,18 @@ static void update_grid_wait(Grid* grid) {
 	if(++grid->state_delay > 15) grid->state = STATE_NORMAL;
 }
 
+
+static void (*gameover_callbackptr)(int nr,int lines) = 0;
+
+void set_gameover_callback(void callback(int nr,int lines))
+{
+	gameover_callbackptr = callback;
+}
+
 static void gameover_callback(int nr,int lines)
 {
+	if(gameover_callbackptr != 0)
+		gameover_callbackptr(nr,lines);
 }
 
 

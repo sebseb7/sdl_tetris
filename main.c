@@ -9,6 +9,12 @@ static Grid grids[PLAYERS];
 #include "sdl_util.h"
 
 
+void gameover(int nr,int lines)
+{
+	//save highscore
+}
+
+
 int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unused__))) 
 {
 	srand(time(NULL));
@@ -19,6 +25,8 @@ int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unu
 	unsigned int* pixelbuffer = sdl_init(PLAYERS*12*zoom, 27*zoom,"Tetris",60);
 
 	for(int i = 0; i < PLAYERS; i++) init_grid(&grids[i], i);
+
+	set_gameover_callback(gameover);
 
 	int limiter=0;
 

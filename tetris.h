@@ -41,6 +41,7 @@ typedef struct Grid {
 void init_grid(Grid* grid, int nr);
 void update_grid(Grid* grid,int getkey(int));
 void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom);
-void suspend_grid(Grid* grid);
+void set_gameover_callback(void callback(int nr,int lines));
+
 
 #endif
