@@ -9,9 +9,30 @@ static Grid grids[PLAYERS];
 #include "sdl_util.h"
 
 
+#include "SDL.h"
+
 void gameover(int nr,int lines)
 {
-	//save highscore
+	if(nr)
+		return;
+
+	char filename[256];
+	int highscore=0;
+
+	snprintf(filename, sizeof filename, "%s%s", SDL_GetPrefPath("net.exse.seb","tetris"), "highscore");
+	SDL_RWops *file = SDL_RWFromFile(filename, "rb");
+	if(file)
+	{
+		highscore=SDL_ReadBE32(file);
+		SDL_RWclose(file);
+	}
+
+	if(lines > highscore)
+	{
+		file = SDL_RWFromFile(filename, "wb");
+		SDL_WriteBE32(file,lines);
+		SDL_RWclose(file);
+	}
 }
 
 
@@ -20,6 +41,7 @@ int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unu
 	srand(time(NULL));
 	
 
+	
 	int zoom = 18;
 
 	unsigned int* pixelbuffer = sdl_init(PLAYERS*12*zoom, 27*zoom,"Tetris",60);
@@ -49,13 +71,3 @@ int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unu
 	return 0;
 }
 
-// couple events + game-progcess -> 8fps limited
-//        render + draw          -> 60ps limited
-
-// any fps limit for both sould work.
-//
-//
-// sdl_util_run("Boudlerdash",h,w,game_logic,8,game_render,60)
-// -> game_logic gets events
-// -> game_render gets buffer, rendering is done afterwards
-//
