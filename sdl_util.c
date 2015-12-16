@@ -91,6 +91,16 @@ int getkey(int key)
 	return 0;
 }
 
+int getkey_single(int key)
+{
+	if((keymap >> key) & 1)
+	{
+		keymap &= ~(1 << key);
+		return 1;
+	}
+	return 0;
+}
+
 void release_upped_keys(void)
 {
 	for(int i = 0; i < 8;i++)
@@ -174,6 +184,9 @@ int sdl_handle_events(const void* pixels)
 					case SDLK_F4:
 						keyup(7);
 						break;
+					case SDLK_SPACE:
+						keyup(8);
+						break;
 					default: break;
 				}
 				break;
@@ -206,6 +219,9 @@ int sdl_handle_events(const void* pixels)
 						break;
 					case SDLK_F4:
 						keydown(7);
+						break;
+					case SDLK_SPACE:
+						keydown(8);
 						/*
 						   zoom=20;
 						   sdl_windowsize(CAVE_WIDTH*zoom, CAVE_HEIGHT*zoom);

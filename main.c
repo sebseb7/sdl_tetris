@@ -30,8 +30,11 @@ void gameover(int nr,int lines)
 	if(lines > highscore)
 	{
 		file = SDL_RWFromFile(filename, "wb");
-		SDL_WriteBE32(file,lines);
-		SDL_RWclose(file);
+		if(file)
+		{
+			SDL_WriteBE32(file,lines);
+			SDL_RWclose(file);
+		}
 	}
 }
 
@@ -39,8 +42,6 @@ void gameover(int nr,int lines)
 int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unused__))) 
 {
 	srand(time(NULL));
-	
-
 	
 	int zoom = 18;
 
@@ -52,18 +53,29 @@ int main(int argc __attribute__((__unused__)), char *argv[] __attribute__((__unu
 
 	int limiter=0;
 
+	int pause=0; 
+
 	while(sdl_handle_events(pixelbuffer)) //limits loop to 60fps
 	{
+		if(getkey_single(8))
+		{
+			pause ^= 1;
+		}
+
 		while(sdl_limit_fps(&limiter,30))
 		{
-			for(int i = 0; i < PLAYERS; i++) {
-				update_grid(&grids[i],getkey);
+			for(int i = 0; i < PLAYERS; i++) 
+			{
+				if(pause == 0)
+				{
+					update_grid(&grids[i],getkey);
+				}
 			}
 			release_upped_keys();
 		}
 
 		for(int i = 0; i < PLAYERS; i++) {
-			draw_grid(&grids[i],i,pixelbuffer,zoom);
+			draw_grid(&grids[i],i,pixelbuffer,zoom,pause);
 		}
 
 	}

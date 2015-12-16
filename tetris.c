@@ -431,15 +431,19 @@ void update_grid(Grid* grid,int getkey(int)) {
 }
 
 
-static void pixel2(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
+static void pixel2(int x, int y, int color,unsigned int* pixelbuffer,int zoom,int pause)
 {
-	uint8_t r[] = {30,100,255,0   ,255,255,255,  0,127,0  ,127,127,0  ,255,255,255};
-	uint8_t g[] = {30,100 ,0  ,255,255,0  ,0  ,255,127,127,255,0  ,127,0  ,127,0  };
-	uint8_t b[] = {30,0   ,0  ,0  ,0  ,255,255,255,255,255,127,255,127,127,0  ,255};
+	uint8_t r[] = {30,50,255,0   ,255,255,255,  0,127,0  ,127,127,0  ,255,255,255};
+	uint8_t g[] = {30,50 ,0  ,255,255,0  ,0  ,255,127,127,255,0  ,127,0  ,127,0  };
+	uint8_t b[] = {30,0  ,0  ,0  ,0  ,255,255,255,255,255,127,255,127,127,0  ,255};
 
 
 
-	unsigned int col = (r[color]<<16)+(g[color]<<8)+b[color];
+	unsigned int col;
+	if(pause)
+		col = ((r[color]+g[color]+b[color]/3)<<16)+(g[color]<<8)+b[color];
+	else
+		col = (r[color]<<16)+(g[color]<<8)+b[color];
 
 	if(pixelbuffer[((y*(zoom/2))*PLAYERS*12*zoom)+x*(zoom/2)] != col)
 		for(int a = 0; a < (zoom/2)-1;a++)
@@ -452,15 +456,19 @@ static void pixel2(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
 
 
 }
-static void pixel(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
+static void pixel(int x, int y, int color,unsigned int* pixelbuffer,int zoom,int pause)
 {
-	uint8_t r[] = {30,100,255,0   ,255,255,255,  0,127,0  ,127,127,0  ,255,255,255};
-	uint8_t g[] = {30,100 ,0  ,255,255,0  ,0  ,255,127,127,255,0  ,127,0  ,127,0  };
-	uint8_t b[] = {30,0   ,0  ,0  ,0  ,255,255,255,255,255,127,255,127,127,0  ,255};
+	uint8_t r[] = {30,50  ,255,0   ,255,255,255,  0,127,0  ,127,127,0  ,255,255,255};
+	uint8_t g[] = {30,50  ,0  ,255,255,0  ,0  ,255,127,127,255,0  ,127,0  ,127,0  };
+	uint8_t b[] = {30,0,0 ,0  ,0  ,255,255,255,255,255,127,255,127,127,0  ,255};
 
 
 
-	unsigned int col = (r[color]<<16)+(g[color]<<8)+b[color];
+	unsigned int col;
+	if(pause)
+		col = ((r[color]+g[color]+b[color]/3)<<16)+(g[color]<<8)+b[color];
+	else
+		col = (r[color]<<16)+(g[color]<<8)+b[color];
 
 	if(pixelbuffer[((y*zoom)*PLAYERS*12*zoom)+x*zoom] != col)
 		for(int a = 0; a < zoom-1;a++)
@@ -476,23 +484,23 @@ static void pixel(int x, int y, int color,unsigned int* pixelbuffer,int zoom)
 
 static unsigned int font5x3[] = {32319,17393,24253,32437,31879,30391,29343,31905,32447,31911};
 
-static void render_digit_5x3(int x,int y, int digit,int color,unsigned int* pixelbuffer,int zoom)
+static void render_digit_5x3(int x,int y, int digit,int color,unsigned int* pixelbuffer,int zoom,int pause)
 {
 	for(int i=0;i<3;i++)
 	{
 		for(int j=0;j<5;j++)
 		{
 			if(digit == -1)
-				pixel2(x+i,y+j,0,pixelbuffer,zoom);
+				pixel2(x+i,y+j,0,pixelbuffer,zoom,pause);
 			else
 			{
 				if(font5x3[digit] & (1<<(i*5+j)))
 				{
-					pixel2(x+i,y+j,color,pixelbuffer,zoom);
+					pixel2(x+i,y+j,color,pixelbuffer,zoom,pause);
 				}
 				else
 				{
-					pixel2(x+i,y+j,0,pixelbuffer,zoom);
+					pixel2(x+i,y+j,0,pixelbuffer,zoom,pause);
 				}
 
 			}
@@ -500,18 +508,18 @@ static void render_digit_5x3(int x,int y, int digit,int color,unsigned int* pixe
 	}
 }
 
-static void render_digits_5x3(int x, int y, const char *text, int color,unsigned int* pixelbuffer,int zoom)
+static void render_digits_5x3(int x, int y, const char *text, int color,unsigned int* pixelbuffer,int zoom,int pause)
 {
 	while (*text)
 	{
-		render_digit_5x3(x,y,(*text)-48,color,pixelbuffer,zoom);
+		render_digit_5x3(x,y,(*text)-48,color,pixelbuffer,zoom,pause);
 		x+=4;
 		text++;
 	}
 
 }
 
-static void render_num(int number,int x,int y,int length,int pad, int color,unsigned int* pixelbuffer,int zoom)
+static void render_num(int number,int x,int y,int length,int pad, int color,unsigned int* pixelbuffer,int zoom,int pause)
 {
 
 	char s[10];
@@ -522,25 +530,25 @@ static void render_num(int number,int x,int y,int length,int pad, int color,unsi
 	if (length < len) {
 		int i;
 		for (i = 0; i < length; i++) {
-			render_digit_5x3(x, y, -1, color,pixelbuffer,zoom);
+			render_digit_5x3(x, y, -1, color,pixelbuffer,zoom,pause);
 			x+=4;
 		}
 		return;
 	}
 	int i;
 	for (i = 0; i < length - len; i++) {
-		render_digit_5x3(x, y, pad, color,pixelbuffer,zoom);
+		render_digit_5x3(x, y, pad, color,pixelbuffer,zoom,pause);
 		x+=4;
 	}
 
-	render_digits_5x3(x, y, (char*)s, color,pixelbuffer,zoom);
+	render_digits_5x3(x, y, (char*)s, color,pixelbuffer,zoom,pause);
 
 }
 
 
 
 
-void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom) {
+void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom,int pause) {
 	int x, y;
 
 
@@ -551,7 +559,7 @@ void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom) {
 			if(STONES[grid->next_stone][x * 4 + y] & grid->next_rot) {
 				color = grid->next_stone + 1;
 			}
-			pixel2(grid->nr * 12 * 2 + x + 18, y + 6, PALETTE[color],pixelbuffer,zoom);
+			pixel2(grid->nr * 12 * 2 + x + 18, y + 6, PALETTE[color],pixelbuffer,zoom,pause);
 		}
 	}
 	// matrix
@@ -564,11 +572,11 @@ void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom) {
 					STONES[grid->stone][(x - grid->x) * 4 + y - grid->y] & grid->rot) {
 				color = grid->stone + 1;
 			}
-			pixel(grid->nr * 12 + 1 + x, y + 6, PALETTE[color],pixelbuffer,zoom);
+			pixel(grid->nr * 12 + 1 + x, y + 6, PALETTE[color],pixelbuffer,zoom,pause);
 		}
 	}
 	// score
-	render_num(grid->lines, grid->nr * 12 * 2 + 2, 5, 3, 0, 8,pixelbuffer,zoom);
+	render_num(grid->lines, grid->nr * 12 * 2 + 2, 5, 3, 0, 8,pixelbuffer,zoom,pause);
 
 
 
