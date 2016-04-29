@@ -44,7 +44,7 @@ tetris_osx.zip: Tetris.app/Contents/MacOS/tetris_osx
 	
 
 SDL2-2.0.4:
-	wget https://www.libsdl.org/tmp/release/SDL2-devel-2.0.4-mingw.tar.gz
+	wget https://www.libsdl.org/release/SDL2-devel-2.0.4-mingw.tar.gz
 	tar -xzf SDL2-devel-2.0.4-mingw.tar.gz
 	rm -f SDL2-devel-2.0.4-mingw.tar.gz
 
