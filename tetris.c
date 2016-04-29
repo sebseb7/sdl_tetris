@@ -327,6 +327,9 @@ static void update_grid_clearlines(Grid* grid) {
 	}
 
 	// erase lines
+	//
+	int pre_lines = grid->lines;
+
 	if(++grid->state_delay >= 24) {
 		for(y = 0; y < GRID_HEIGHT; y++) {
 			if(!grid->highlight[y]) continue;
@@ -354,6 +357,8 @@ static void update_grid_clearlines(Grid* grid) {
 		if(++grid->animation == ANIMATION_COUNT) grid->animation = 0;
 
 	}
+	
+	grid->score+= ((grid->lines - pre_lines) * (grid->lines - pre_lines));
 }
 
 static void update_grid_wait(Grid* grid) {
@@ -386,7 +391,7 @@ static void update_grid_gameover(Grid* grid) {
 	}
 
 	if(++grid->state_delay > 25) {
-		gameover_callback(grid->nr,grid->lines);
+		gameover_callback(grid->nr,grid->score);
 		init_grid(grid, grid->nr);
 	}
 }
@@ -397,6 +402,7 @@ void init_grid(Grid* grid, int nr) {
 	grid->ticks_per_drop = 20;
 	grid->level_progress = 0;
 	grid->lines = 0;
+	grid->score = 0;
 	grid->animation = 0;
 	grid->state = STATE_NORMAL;
 	memset(grid->matrix, 0, sizeof(grid->matrix));
@@ -576,7 +582,7 @@ void draw_grid(Grid* grid,int nr,unsigned int* pixelbuffer,int zoom,int pause) {
 		}
 	}
 	// score
-	render_num(grid->lines, grid->nr * 12 * 2 + 2, 5, 3, 0, 8,pixelbuffer,zoom,pause);
+	render_num(grid->score, grid->nr * 12 * 2 + 2, 5, 3, 0, 8,pixelbuffer,zoom,pause);
 
 
 

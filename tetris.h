@@ -28,6 +28,7 @@ typedef struct Grid {
 	int ticks_per_drop;
 	int level_progress;
 	int lines;
+	int score;
 	int state;
 	int state_delay;
 	int animation;
